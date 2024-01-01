@@ -12,7 +12,10 @@ export const StackNavigator = () => {
       <Stack.Navigator>
         <Stack.Screen
           name={ROUTES_NAMED.EXPENSES_OVERVIEW}
-          component={ExpensesOverviewBottomTabs}/>
+          component={ExpensesOverviewBottomTabs}
+          options={{
+            headerShown: false
+          }}/>
         <Stack.Screen
           name={ROUTES_NAMED.MANAGE_EXPENSE}
           component={ManageExpense}/>
