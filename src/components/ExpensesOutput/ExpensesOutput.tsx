@@ -1,15 +1,12 @@
 import {View} from "react-native";
 import {ExpensesSummary} from "@components/ExpensesOutput/ExpensesSummary";
 import {ExpensesList} from "@components/ExpensesOutput/ExpensesList";
+import {Expense} from "@data/models/Expense";
 
 export type ExpensesOutputProp = {
-  expenses: any[],
+  expenses: Expense[],
   expensesPeriod: string
 }
-
-const DUMMY_EXPENSES = [
-
-]
 
 export const ExpensesOutput = (props: ExpensesOutputProp) => {
   return (
@@ -17,7 +14,7 @@ export const ExpensesOutput = (props: ExpensesOutputProp) => {
       <ExpensesSummary
         expenses={props.expenses}
         periodName={props.expensesPeriod}/>
-      <ExpensesList/>
+      <ExpensesList expenses={props.expenses}/>
     </View>
   )
 }

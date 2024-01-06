@@ -1,7 +1,8 @@
 import {Text, View} from "react-native";
+import {Expense} from "@data/models/Expense";
 
 export type ExpensesSummaryProps = {
-  expenses: any[],
+  expenses: Expense[],
   periodName: string
 }
 
