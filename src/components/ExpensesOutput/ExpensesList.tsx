@@ -1,5 +1,6 @@
 import {FlatList, ListRenderItemInfo, Text} from "react-native";
 import {Expense} from "@data/models/Expense";
+import {ExpenseItem} from "@components/ExpensesOutput/ExpenseItem";
 
 export type ExpensesListProp = {
   expenses: Expense[],
@@ -7,7 +8,7 @@ export type ExpensesListProp = {
 
 const renderExpenseItem = (itemData: ListRenderItemInfo<Expense>) => {
   return (
-    <Text>{itemData.item.description}</Text>
+    <ExpenseItem {...itemData.item}/>
   )
 }
 

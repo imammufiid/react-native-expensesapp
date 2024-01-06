@@ -1,5 +1,6 @@
-import {Text, View} from "react-native";
+import {StyleSheet, Text, View} from "react-native";
 import {Expense} from "@data/models/Expense";
+import {Colors, StyleColor} from "@/utils/constants/color";
 
 export type ExpensesSummaryProps = {
   expenses: Expense[],
@@ -13,9 +14,29 @@ export const ExpensesSummary = (props: ExpensesSummaryProps) => {
     }, 0)
 
   return (
-    <View>
-      <Text>{props.periodName}</Text>
-      <Text>${expensesSum.toFixed(2)}</Text>
+    <View style={styles.container}>
+      <Text style={styles.period}>{props.periodName}</Text>
+      <Text style={styles.sum}>${expensesSum.toFixed(2)}</Text>
     </View>
   )
 }
+
+const styles = StyleSheet.create({
+  container: {
+    padding: 8,
+    backgroundColor: StyleColor.accentColor,
+    borderRadius: 6,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
+  },
+  period: {
+    fontSize: 12,
+    color: StyleColor.primaryDarkColor,
+  },
+  sum: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: StyleColor.primaryDarkColor
+  }
+})

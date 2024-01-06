@@ -284,6 +284,7 @@ export const Colors = {
 
 export const StyleColor = {
   primaryColor: Colors.lightBlue500,
+  primaryDarkColor: Colors.lightBlue900,
   secondaryColor: Colors.lightGreen500,
   accentColor: Colors.amber500,
   backgroundColor: Colors.grey100,
