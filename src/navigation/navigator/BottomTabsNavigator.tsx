@@ -4,6 +4,7 @@ import {RecentExpense} from "@/screens/RecentExpense";
 import {AllExpenses} from "@/screens/AllExpenses";
 import {Colors, StyleColor} from "@/utils/constants/color";
 import {Ionicons} from "@expo/vector-icons";
+import {IconButton} from "@components/commons/IconButton";
 
 const BottomTabs = createBottomTabNavigator()
 
@@ -23,7 +24,14 @@ export const ExpensesOverviewBottomTabs = () => {
         tabBarLabelStyle: {
           fontWeight: 'bold',
           fontSize: 12
-        }
+        },
+        headerRight: ({tintColor}) => (
+          <IconButton
+            icon="add"
+            size={24}
+            color={tintColor}
+            onPress={() => {}}/>
+        )
       }}>
       <BottomTabs.Screen
         name={ROUTES_NAMED.RECENT_EXPENSES}
