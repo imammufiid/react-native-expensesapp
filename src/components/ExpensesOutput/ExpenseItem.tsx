@@ -1,6 +1,9 @@
 import {TouchableOpacity, View, Text, StyleSheet} from "react-native";
 import {Colors, StyleColor} from "@/utils/constants/color";
 import {getFormatDate} from "@/utils/date";
+import {useNavigation} from "@react-navigation/core";
+import ROUTES_NAMED from "@/navigation/Routes";
+import {StackNavigation} from "@/navigation/Utils";
 
 
 export type ExpenseItemProps = {
@@ -11,8 +14,15 @@ export type ExpenseItemProps = {
 
 export const ExpenseItem = (props: ExpenseItemProps) => {
   const {description, amount, date} = props
+  const navigation = useNavigation<StackNavigation>()
+
+  const expensePressHandler = () => {
+    navigation.navigate(ROUTES_NAMED.MANAGE_EXPENSE)
+  }
+
   return (
-    <TouchableOpacity>
+    <TouchableOpacity
+      onPress={expensePressHandler}>
       <View style={styles.expenseItem}>
         <View>
           <Text style={[styles.textBase, styles.description]}>{description}</Text>

@@ -11,28 +11,30 @@ const BottomTabs = createBottomTabNavigator()
 export const ExpensesOverviewBottomTabs = () => {
   return (
     <BottomTabs.Navigator
-      screenOptions={{
-        headerStyle: {
-          backgroundColor: StyleColor.primaryColor,
-        },
-        headerTintColor: Colors.white,
-        tabBarStyle: {
-          backgroundColor: StyleColor.primaryColor
-        },
-        tabBarActiveTintColor: StyleColor.accentColor,
-        tabBarInactiveTintColor: Colors.grey300,
-        tabBarLabelStyle: {
-          fontWeight: 'bold',
-          fontSize: 12
-        },
-        headerRight: ({tintColor}) => (
-          <IconButton
-            icon="add"
-            size={24}
-            color={tintColor}
-            onPress={() => {}}/>
-        )
-      }}>
+      screenOptions={({navigation}) => (
+        {
+          headerStyle: {
+            backgroundColor: StyleColor.primaryColor,
+          },
+          headerTintColor: Colors.white,
+          tabBarStyle: {
+            backgroundColor: StyleColor.primaryColor
+          },
+          tabBarActiveTintColor: StyleColor.accentColor,
+          tabBarInactiveTintColor: Colors.grey300,
+          tabBarLabelStyle: {
+            fontWeight: 'bold',
+            fontSize: 12
+          },
+          headerRight: ({tintColor}) => (
+            <IconButton
+              icon="add"
+              size={24}
+              color={tintColor}
+              onPress={() => navigation.navigate(ROUTES_NAMED.MANAGE_EXPENSE)}/>
+          )
+        }
+      )}>
       <BottomTabs.Screen
         name={ROUTES_NAMED.RECENT_EXPENSES}
         component={RecentExpense}

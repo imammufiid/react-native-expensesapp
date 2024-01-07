@@ -3,8 +3,9 @@ import ROUTES_NAMED from "@/navigation/Routes";
 import {ManageExpense} from "@/screens/ManageExpense";
 import {NavigationContainer} from "@react-navigation/native";
 import {ExpensesOverviewBottomTabs} from "@/navigation/navigator/BottomTabsNavigator";
+import {RootStackParamList} from "@/navigation/Utils";
 
-const Stack = createStackNavigator()
+const Stack = createStackNavigator<RootStackParamList>()
 
 export const StackNavigator = () => {
   return (
