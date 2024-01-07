@@ -4,20 +4,25 @@ import {getFormatDate} from "@/utils/date";
 import {useNavigation} from "@react-navigation/core";
 import ROUTES_NAMED from "@/navigation/Routes";
 import {StackNavigation} from "@/navigation/Utils";
+import {ManageExpenseParams} from "@/screens/ManageExpense";
 
 
 export type ExpenseItemProps = {
+  id: string,
   description: string,
   amount: number,
   date: Date
 }
 
 export const ExpenseItem = (props: ExpenseItemProps) => {
-  const {description, amount, date} = props
+  const {id, description, amount, date} = props
   const navigation = useNavigation<StackNavigation>()
 
   const expensePressHandler = () => {
-    navigation.navigate(ROUTES_NAMED.MANAGE_EXPENSE)
+    const params: ManageExpenseParams = {
+      expenseId: id
+    }
+    navigation.navigate(ROUTES_NAMED.MANAGE_EXPENSE, params)
   }
 
   return (
