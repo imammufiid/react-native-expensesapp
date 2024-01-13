@@ -1,8 +1,11 @@
 import {ExpensesOutput} from "@components/ExpensesOutput/ExpensesOutput";
-import {DUMMY_EXPENSES} from "@data/source/local/DummyData";
+import {useSelector} from "react-redux";
+import {RootState} from "@/redux/store";
 
 export const AllExpenses = () => {
+  const expenses = useSelector((state: RootState) => state.expense.expenses)
+  console.log('All Expense', expenses)
   return (
-    <ExpensesOutput expenses={DUMMY_EXPENSES} expensesPeriod='Total'/>
+    <ExpensesOutput expenses={expenses} expensesPeriod='Total'/>
   )
 }
