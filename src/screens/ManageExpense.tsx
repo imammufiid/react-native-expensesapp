@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View} from "react-native";
+import {StyleSheet, View} from "react-native";
 import {useLayoutEffect} from "react";
 import {IconButton} from "@components/commons/IconButton";
 import {Colors, StyleColor} from "@/utils/constants/color";
@@ -11,7 +11,6 @@ import {
   DeleteExpensePayload, updateExpense,
   UpdateExpensePayload
 } from "@/redux/expenses";
-import {Expense} from "@data/models/Expense";
 
 export type ManageExpenseParams = {
   expenseId: string
@@ -40,17 +39,25 @@ export const ManageExpense = (props: any) => {
     navigation.goBack()
   }
 
+  const updateExpenseHandler = () => {
+    const data: UpdateExpensePayload = {
+      expense: {id: 'e13', description: '123123123123', amount: 0, date: new Date('2024-01-12')}
+    }
+    dispatch(updateExpense(data))
+  }
+
+  const addExpenseHandler = () => {
+    const data: AddExpensePayload = {
+      expense: {id: 'e13', description: 'fasdfasdfasdf', amount: 10, date: new Date('2024-01-12')}
+    }
+    dispatch(addExpense(data))
+  }
+
   const confirmHandler = () => {
-    if (!isEditing) {
-      const data: AddExpensePayload = {
-        expense: {id: 'e13', description: 'fasdfasdfasdf', amount: 10, date: new Date('2024-01-12')}
-      }
-      dispatch(addExpense(data))
+    if (isEditing) {
+      updateExpenseHandler()
     } else {
-      const data: UpdateExpensePayload = {
-        expense: {id: 'e13', description: '123123123123', amount: 0, date: new Date('2024-01-12')}
-      }
-      dispatch(updateExpense(data))
+      addExpenseHandler()
     }
     navigation.goBack()
   }
