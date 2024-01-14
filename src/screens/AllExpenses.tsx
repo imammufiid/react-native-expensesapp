@@ -6,6 +6,6 @@ export const AllExpenses = () => {
   const expenses = useSelector((state: RootState) => state.expense.expenses)
   console.log('All Expense', expenses)
   return (
-    <ExpensesOutput expenses={expenses} expensesPeriod='Total'/>
+    <ExpensesOutput expenses={expenses} expensesPeriod='Total' fallback="No Data"/>
   )
 }

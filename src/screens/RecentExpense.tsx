@@ -15,6 +15,6 @@ export const RecentExpense = () => {
     .filter(filter7DaysAgo)
 
   return (
-    <ExpensesOutput expenses={expenses} expensesPeriod='Last 7 Days'/>
+    <ExpensesOutput expenses={expenses} expensesPeriod='Last 7 Days' fallback="No Data in 7 Days"/>
   )
 }
