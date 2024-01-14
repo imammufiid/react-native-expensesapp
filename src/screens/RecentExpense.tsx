@@ -8,13 +8,11 @@ export const RecentExpense = () => {
   const filter7DaysAgo = (expense: Expense) => {
     const today = new Date()
     const date7DaysAgo = getDateMinusDays(today, 7)
-    return expense.date > date7DaysAgo
+    return (expense.date > date7DaysAgo) && (expense.date <= today)
   }
 
   const expenses = useSelector((state: RootState) => state.expense.expenses)
     .filter(filter7DaysAgo)
-
-  console.log('Recent Expense', expenses)
 
   return (
     <ExpensesOutput expenses={expenses} expensesPeriod='Last 7 Days'/>

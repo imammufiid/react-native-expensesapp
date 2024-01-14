@@ -3,6 +3,15 @@ import {useLayoutEffect} from "react";
 import {IconButton} from "@components/commons/IconButton";
 import {Colors, StyleColor} from "@/utils/constants/color";
 import {Button} from "@components/commons/Button";
+import {useDispatch} from "react-redux";
+import {
+  addExpense,
+  AddExpensePayload,
+  deleteExpense,
+  DeleteExpensePayload, updateExpense,
+  UpdateExpensePayload
+} from "@/redux/expenses";
+import {Expense} from "@data/models/Expense";
 
 export type ManageExpenseParams = {
   expenseId: string
@@ -11,6 +20,7 @@ export const ManageExpense = (props: any) => {
   const {route, navigation} = props
   const params = route.params as ManageExpenseParams | undefined
   const isEditing = !!params?.expenseId
+  const dispatch = useDispatch()
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -19,6 +29,10 @@ export const ManageExpense = (props: any) => {
   }, [navigation, isEditing])
 
   const deleteExpenseHandler = () => {
+    const payload: DeleteExpensePayload = {
+      id: params?.expenseId ?? ''
+    }
+    dispatch(deleteExpense(payload))
     navigation.goBack()
   }
 
@@ -27,6 +41,17 @@ export const ManageExpense = (props: any) => {
   }
 
   const confirmHandler = () => {
+    if (!isEditing) {
+      const data: AddExpensePayload = {
+        expense: {id: 'e13', description: 'fasdfasdfasdf', amount: 10, date: new Date('2024-01-12')}
+      }
+      dispatch(addExpense(data))
+    } else {
+      const data: UpdateExpensePayload = {
+        expense: {id: 'e13', description: '123123123123', amount: 0, date: new Date('2024-01-12')}
+      }
+      dispatch(updateExpense(data))
+    }
     navigation.goBack()
   }
 
