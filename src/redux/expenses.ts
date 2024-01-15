@@ -38,6 +38,7 @@ const expensesSlice = createSlice({
       const expenseIndex = state.expenses.findIndex(ex => ex.id === action.payload.expense.id)
       const expense = state.expenses[expenseIndex]
       const payload = action.payload.expense
+      console.log('payload', payload)
       state.expenses[expenseIndex] = new Expense(expense.id, payload.description, payload.amount, payload.date)
     },
   }

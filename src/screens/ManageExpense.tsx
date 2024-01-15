@@ -2,8 +2,7 @@ import {StyleSheet, View} from "react-native";
 import {useLayoutEffect} from "react";
 import {IconButton} from "@components/commons/IconButton";
 import {Colors, StyleColor} from "@/utils/constants/color";
-import {Button} from "@components/commons/Button";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {
   addExpense,
   AddExpensePayload,
@@ -11,6 +10,9 @@ import {
   DeleteExpensePayload, updateExpense,
   UpdateExpensePayload
 } from "@/redux/expenses";
+import {ExpenseForm} from "@components/ManageExpense/ExpenseForm";
+import {Expense} from "@data/models/Expense";
+import {RootState} from "@/redux/store";
 
 export type ManageExpenseParams = {
   expenseId: string
@@ -19,6 +21,8 @@ export const ManageExpense = (props: any) => {
   const {route, navigation} = props
   const params = route.params as ManageExpenseParams | undefined
   const isEditing = !!params?.expenseId
+  const expenses = useSelector((state: RootState) => state.expense.expenses)
+  const expense = expenses.find((item) => item.id === params?.expenseId)
   const dispatch = useDispatch()
 
   useLayoutEffect(() => {
@@ -39,43 +43,34 @@ export const ManageExpense = (props: any) => {
     navigation.goBack()
   }
 
-  const updateExpenseHandler = () => {
-    const data: UpdateExpensePayload = {
-      expense: {id: 'e13', description: '123123123123', amount: 0, date: new Date('2024-01-12')}
+  const updateExpenseHandler = (data: Expense) => {
+    const payload: UpdateExpensePayload = {
+      expense: data
     }
-    dispatch(updateExpense(data))
+    dispatch(updateExpense(payload))
   }
 
-  const addExpenseHandler = () => {
-    const data: AddExpensePayload = {
-      expense: {id: 'e13', description: 'fasdfasdfasdf', amount: 10, date: new Date('2024-01-12')}
+  const addExpenseHandler = (data: Expense) => {
+    const payload: AddExpensePayload = {
+      expense: {...data}
     }
-    dispatch(addExpense(data))
+    dispatch(addExpense(payload))
   }
 
-  const confirmHandler = () => {
-    if (isEditing) {
-      updateExpenseHandler()
-    } else {
-      addExpenseHandler()
-    }
+  const confirmHandler = (data: Expense) => {
+    if (isEditing) updateExpenseHandler(data)
+    else addExpenseHandler(data)
+
     navigation.goBack()
   }
 
   return (
     <View style={styles.container}>
-      <View style={styles.buttons}>
-        <Button
-          onPress={cancelHandler}
-          mode='flat' style={styles.button}>
-          Cancel
-        </Button>
-        <Button
-          onPress={confirmHandler}
-          style={styles.button}>
-          {isEditing ? 'Update' : 'Add'}
-        </Button>
-      </View>
+      <ExpenseForm
+        expense={expense}
+        isEditable={isEditing}
+        onCancel={cancelHandler}
+        onSubmit={confirmHandler}/>
       {isEditing && (
         <View style={styles.deleteContainer}>
           <IconButton
@@ -94,15 +89,6 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 24,
     backgroundColor: StyleColor.primaryDarkColor
-  },
-  buttons: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  button: {
-    minWidth: 120,
-    marginHorizontal: 8
   },
   deleteContainer: {
     marginTop: 16,
