@@ -1,24 +1,22 @@
-import {StyleSheet, Text, View} from "react-native";
+import {Alert, StyleSheet, Text, View} from "react-native";
 import {Input} from "@components/ManageExpense/Input";
 import {StyleColor} from "@/utils/constants/color";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {Button} from "@components/commons/Button";
 import {Expense} from "@data/models/Expense";
 import {generateRandomString} from "@/utils/string";
 import {getFormatDate} from "@/utils/date";
 
 type ExpenseDataForm = {
-  id: string,
-  amount: string,
-  date: string,
-  description: string
+  id: FormProperty,
+  amount: FormProperty,
+  date: FormProperty,
+  description: FormProperty
 }
 
-const initialExpenseDataForm: ExpenseDataForm = {
-  id: '',
-  amount: '',
-  date: '',
-  description: '',
+type FormProperty = {
+  value: any,
+  isValid: boolean
 }
 
 type ExpenseFormProps = {
@@ -30,38 +28,68 @@ type ExpenseFormProps = {
 
 export const ExpenseForm = (props: ExpenseFormProps) => {
   const {expense} = props
-  const [inputValues, setInputValues] = useState(initialExpenseDataForm)
-
-  useEffect(() => {
-    setInputValues((prevState) => (
-      {
-        ...prevState,
-        id: expense?.id ?? '',
-        amount: expense?.amount.toString() ?? '',
-        date: getFormatDate(expense?.date ?? new Date()),
-        description: expense?.description ?? '',
-      }
-    ))
-  }, [props])
+  const initialExpenseDataForm: ExpenseDataForm = {
+    id: {
+      value: expense ? expense.id : '',
+      isValid: !!expense
+    },
+    amount: {
+      value: expense ? expense.amount.toString() : '',
+      isValid: true
+    },
+    date: {
+      value: expense ? getFormatDate(expense.date) : '',
+      isValid: true
+    },
+    description: {
+      value: expense ? expense.description : '',
+      isValid: true
+    },
+  }
+  const [inputs, setInputs] = useState(initialExpenseDataForm)
 
   const inputChangedHandler = (identifier: string, value: string) => {
-    setInputValues((prevState) => (
+    setInputs((prevState) => (
       {
         ...prevState,
-        [identifier]: value
+        [identifier]: {value: value, isValid: true}
       }
     ))
   }
   const getId = () => {
-    if (inputValues.id === '') {
+    if (inputs.id.value === '') {
       return generateRandomString(3)
     }
-    return inputValues.id
+    return inputs.id.value
   }
   const onCancelHandler = () => props.onCancel()
   const onSubmitHandler = () => {
-    const data = new Expense(getId(), inputValues.description, +inputValues.amount, new Date(inputValues.date))
+    const data = new Expense(
+      getId(),
+      inputs.description.value,
+      +inputs.amount.value,
+      new Date(inputs.date.value)
+    )
+    if (!validateInput(data)) return
     props.onSubmit(data)
+  }
+
+  const validateInput = (data: Expense) => {
+    const amountIsValid = data.amount > 0
+    const dateIsValid = data.date.toString() !== 'Invalid Date'
+    const descriptionIsValid = data.description.trim().length > 0
+    if (!amountIsValid || !dateIsValid || !descriptionIsValid) {
+      setInputs((prevState) => {
+        return {
+          ...prevState,
+          amount: {value: prevState.amount.value, isValid: amountIsValid },
+          date: {value: prevState.date.value, isValid: dateIsValid },
+          description: {value: prevState.description.value, isValid: descriptionIsValid },
+        }
+      })
+      return false
+    }
+    return true
   }
 
   return (
@@ -70,8 +98,9 @@ export const ExpenseForm = (props: ExpenseFormProps) => {
       <View style={styles.inputRow}>
         <Input
           label="Amount"
+          isValid={inputs.amount.isValid}
           textInputConfig={{
-            value: inputValues.amount,
+            value: inputs.amount.value,
             placeholder: '0',
             keyboardType: 'decimal-pad',
             onChangeText: inputChangedHandler.bind(this, 'amount')
@@ -79,8 +108,9 @@ export const ExpenseForm = (props: ExpenseFormProps) => {
           style={styles.rowInput}/>
         <Input
           label="Date"
+          isValid={inputs.date.isValid}
           textInputConfig={{
-            value: inputValues.date,
+            value: inputs.date.value,
             placeholder: 'YYYY-MM-DD',
             maxLength: 10,
             onChangeText: inputChangedHandler.bind(this, 'date')
@@ -89,8 +119,9 @@ export const ExpenseForm = (props: ExpenseFormProps) => {
       </View>
       <Input
         label="Description"
+        isValid={inputs.description.isValid}
         textInputConfig={{
-          value: inputValues.description,
+          value: inputs.description.value,
           multiline: true,
           onChangeText: inputChangedHandler.bind(this, 'description')
         }}/>

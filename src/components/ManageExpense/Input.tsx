@@ -3,6 +3,7 @@ import {Colors, StyleColor} from "@/utils/constants/color";
 
 export type InputProps = {
   label: string,
+  isValid?: boolean,
   textInputConfig?: TextInputProps,
   style?: StyleProp<any>
 }
@@ -13,13 +14,17 @@ export const Input = (props: InputProps) => {
   if (props.textInputConfig && props.textInputConfig.multiline) {
     inputStyle.push(styles.inputMultiline)
   }
+  if (!props.isValid) {
+    inputStyle.push(styles.invalidInput)
+  }
 
   return (
     <View style={[styles.container, props.style]}>
-      <Text style={styles.label}>{props.label}</Text>
+      <Text style={[styles.label, !props.isValid && styles.invalidLabel ]}>{props.label}</Text>
       <TextInput
         style={inputStyle}
         {...props.textInputConfig}/>
+      {!props.isValid && <Text style={styles.errorText}>Invalid input values</Text>}
     </View>
   )
 }
@@ -45,5 +50,15 @@ const styles = StyleSheet.create({
   inputMultiline: {
     minHeight: 100,
     textAlignVertical: 'top'
+  },
+  invalidLabel: {
+    color: Colors.red500
+  },
+  invalidInput: {
+    backgroundColor: Colors.red500
+  },
+  errorText: {
+    marginTop: 4,
+    color: Colors.red500,
   }
 })
